@@ -2,6 +2,10 @@ const newGameBtn = document.getElementById('new-game-btn')
 const drawBtn = document.getElementById('draw-btn')
 const standBtn = document.getElementById('stand-btn')
 const cardTable = document.getElementById('card-table')
+const resultEl = document.getElementById('result')
+
+const playerScoreEl = document.getElementById('player-score')
+const dealerScoreEl = document.getElementById('dealer-score')
 
 // Event listener
 
@@ -25,13 +29,13 @@ async function newGame() {
         deckId: '',
         playerCards: [],
         dealerCards: [],
-        playerScore: 0,
-        dealerScore: 0,
+        playerScore: gameState.playerScore,
+        dealerScore: gameState.dealerScore,
         gameOver: false,
     }
 
-    drawBtn.disabled = false
-    standBtn.disabled = false
+    resultEl.textContent = ''
+    newGameBtn.disabled = true
 
     try {
         const response = await fetch('https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
@@ -50,6 +54,9 @@ async function newGame() {
         gameState.dealerCards = dealerCardsData.cards
 
         renderCards()
+
+        drawBtn.disabled = false
+        standBtn.disabled = false
 
         return gameState
 
@@ -99,7 +106,9 @@ async function drawDealerCard(){
 // Deck
 
 function renderCards() {
-    cardTable.innerHTML = getDeck(gameState.dealerCards, 'dealer') + getDeck(gameState.playerCards, 'player')
+    cardTable.innerHTML = 
+        getDeck(gameState.dealerCards, 'dealer')
+        + getDeck(gameState.playerCards, 'player')
 }
 
 function getCardsValue(deck) {
@@ -154,6 +163,7 @@ function endRound(){
     if (gameState.gameOver) return
     
     gameState.gameOver = true
+    newGameBtn.disabled = false
     drawBtn.disabled = true
     standBtn.disabled = true 
 
@@ -162,19 +172,25 @@ function endRound(){
     const playerBust = playerValue > 21
     const dealerBust = dealerValue > 21
 
+    let result = ''
+
     if (playerBust) {
         gameState.dealerScore++
-        console.log('Dealer wins (Player bust)')
+        result = 'Dealer wins (Player bust)'
     } else if (dealerBust) {
         gameState.playerScore++
-        console.log('Player wins (Dealer bust)')
+        result = 'Player wins (Dealer bust)'
     } else if (playerValue > dealerValue) {
         gameState.playerScore++
-        console.log('Player wins')
+        result = 'Player wins'
     } else if (dealerValue > playerValue) {
         gameState.dealerScore++
-        console.log('Dealer wins')
+        result = 'Dealer wins'
     } else {
-        console.log('Push (tie)')
+        result = 'Push (tie)'
     }
+
+    resultEl.textContent = result
+    playerScoreEl.textContent = gameState.playerScore
+    dealerScoreEl.textContent = gameState.dealerScore
 }
