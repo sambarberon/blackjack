@@ -55,8 +55,12 @@ async function newGame() {
 
         renderCards()
 
-        drawBtn.disabled = false
-        standBtn.disabled = false
+        if (getCardsValue(gameState.playerCards) === 21 || getCardsValue(gameState.dealerCards) === 21) {
+            endRound()
+        } else {
+            drawBtn.disabled = false
+            standBtn.disabled = false
+        }
 
         return gameState
 
@@ -180,9 +184,21 @@ function endRound(){
     } else if (dealerBust) {
         gameState.playerScore++
         result = 'Player wins (Dealer bust)'
+    } else if (playerValue === 21 && playerValue > dealerValue && gameState.playerCards.length === 2) {
+        gameState.playerScore++
+        result = 'Blackjack! (Player wins)'
+    } else if (playerValue === 21 && playerValue > dealerValue) {
+        gameState.playerScore++
+        result = '21! (Player wins)'
     } else if (playerValue > dealerValue) {
         gameState.playerScore++
         result = 'Player wins'
+    } else if (dealerValue === 21 && dealerValue > playerValue && gameState.dealerCards.length === 2) {
+        gameState.dealerScore++
+        result = 'Blackjack! (Dealer wins)'
+    } else if (dealerValue === 21 && dealerValue > playerValue) {
+        gameState.dealerScore++
+        result = '21! (Dealer wins)'
     } else if (dealerValue > playerValue) {
         gameState.dealerScore++
         result = 'Dealer wins'
