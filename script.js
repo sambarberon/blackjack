@@ -4,9 +4,6 @@ const standBtn = document.getElementById('stand-btn')
 const cardTable = document.getElementById('card-table')
 const resultEl = document.getElementById('result')
 
-const playerScoreEl = document.getElementById('player-score')
-const dealerScoreEl = document.getElementById('dealer-score')
-
 // Event listener
 
 newGameBtn.addEventListener('click', newGame)
@@ -34,7 +31,7 @@ async function newGame() {
         gameOver: false,
     }
 
-    resultEl.textContent = ''
+    resultEl.textContent = 'Hit or Stand'
     newGameBtn.disabled = true
 
     try {
@@ -107,16 +104,16 @@ async function drawDealerCard(){
     }
 }
 
-// Deck
+// Hand
 
 function renderCards() {
     cardTable.innerHTML = 
-        getDeck(gameState.dealerCards, 'dealer')
-        + getDeck(gameState.playerCards, 'player')
+        getHand(gameState.dealerCards, gameState.dealerScore,'dealer')
+        + getHand(gameState.playerCards, gameState.playerScore,'player')
 }
 
-function getCardsValue(deck) {
-    return deck.reduce((total, card) => {
+function getCardsValue(hand) {
+    return hand.reduce((total, card) => {
         if (['KING', 'QUEEN', 'JACK'].includes(card.value)) {
             return total + 10
         }
@@ -128,21 +125,27 @@ function getCardsValue(deck) {
     }, 0)
 }
 
-function getCardsImg(deck) {
-    return deck.map((card) => `<img class="card-img" src="${card.image}" />`).join('')
+function getCardsImg(hand) {
+    return hand.map((card) => `<img class="card-img" src="${card.image}" />`).join('')
 }
 
-function getDeck(deck, name) {
-    const cardsValue = getCardsValue(deck)
-    const cardsImg = getCardsImg(deck)
+function getHand(hand, score, name) {
+    const cardsValue = getCardsValue(hand)
+    const cardsImg = getCardsImg(hand)
+
 
     return `
-        <div class="deck" id="${name}-deck">
-            <div class="deck-top">
-                <h2>${name}'s deck</h2>
-                <p class="deck-value" id="${name}-deck-value">${cardsValue}</p>
+        <div class="hand" id="${name}-hand">
+            <div class="hand-top">
+                <h2>${name}'s hand</h2>
+                <p class="score" id="${name}-score">${score}</p>
             </div>
-            <div id="${name}-deck-cards">${cardsImg}</div>
+            <div class="hand-bottom">
+                <div class="hand-cards" id="${name}-hand-cards">
+                    ${cardsImg}
+                </div>
+                <p class="hand-value" id="${name}-hand-value">${cardsValue}</p>
+            </div>
         </div>
     `
 }
@@ -207,6 +210,4 @@ function endRound(){
     }
 
     resultEl.textContent = result
-    playerScoreEl.textContent = gameState.playerScore
-    dealerScoreEl.textContent = gameState.dealerScore
 }

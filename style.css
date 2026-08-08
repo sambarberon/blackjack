@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist+Pixel&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:ital,wght@0,100..900;1,100..900&display=swap');
 
 * {
     margin: 0;
@@ -8,97 +8,137 @@
 
 body {
     height: 100vh;
-    font-family: "Geist Pixel", sans-serif;
+    font-family: "Geist Mono", sans-serif;
     color: #fff;
-    background-color: darkgreen;
+    background-color: #000;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
 }
 
 header {
-    width: 100%;
-    padding: 1em;
+    padding: 1em 2em;
+    border-bottom: 1px solid #272727;
+}
+
+main {
+    height: 100%;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+
+}
+
+h1, h2, h3 {
+    line-height: 1;
+    font-weight: 400;
+    text-transform: lowercase;
 }
 
 h1 {
-    font-size: 2.986rem;
+    font-size: 1.25rem;
 }
 
-.board {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.btn-group {
-    padding: 1em 4em;
+h2 {
+    font-size: 1rem;
 }
 
 button {
-    padding: 1em 2em;
+    padding: 16px 32px;
     font-family: inherit;
+    font-size: 1.25rem;
+    text-transform: lowercase;
     color: #000;
-    background-color: yellow;
+    background-color: rgb(255, 242, 117);
     border: none;
-    border-radius: 24px;
+    border-radius: 4px;
     cursor: pointer;
 }
 
 button:disabled {
-    background-color: #eee;
-    cursor: not-allowed;
+    color: #999;
+    background-color: #333;
 }
 
-h2 {
-    font-size: 1.2rem;
-    text-transform: capitalize;
+.rules {
+    width: 320px;
+    border-right: 1px solid #272727;
+}
+
+.rules-item {
+    padding: 1em 2em;
+    border-bottom: 1px solid #272727;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.rules-item p {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: #999;
+}
+
+/* —— Hand —— */
+
+.board {
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.board-top {
+    display: flex;
+    flex-direction: column;
+    gap: 3em;
 }
 
 #card-table {
     display: flex;
     flex-direction: column;
-    gap: 4em;
+    gap: 2em;
 }
 
-.deck {
+#result {
+    font-size: 1.25rem;
+}
+
+.hand {
     display: flex;
     flex-direction: column;
     gap: 1em;
 }
 
-.deck-top {
+.hand-top {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    align-items: first baseline;
+    gap: 0.75em;
 }
 
-.deck-value {
-    padding: 0.5em;
-    color: #000;
-    background-color: yellow;
-    border-radius: 4px;
+.score {
+    color: rgb(255, 242, 117);
 }
+
+.hand-bottom {
+    display: flex;
+    gap: 1em;
+}
+
+.hand-cards {
+    display: flex;
+    gap: 0.25em;
+}
+
 
 .card-img {
-    width: 100px;
+    height: 160px;
 }
 
-.score-board {
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
+.hand-value {
+    font-size: 1.563rem;
 }
 
-.score-item {
-    padding: 0.5em 1em;
-    color: #000;
-    background-color: yellow;
-    border-radius: 4px;
-    text-align: center;
+.fake-card {
+    background-color: #999;
+    height: 160px;
+    width: 120px;
+    border-radius: 8px;
 }
