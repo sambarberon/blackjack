@@ -6,27 +6,75 @@
     </head>
     <body>
         <header>
-            <h1>♥♠ sambarberon/blackjack ♦♣</h1>
-            <div class="score-board">
-                <p id="result"></p>
-                <div class="score-item">
-                    <p>Player</p>
-                    <p id="player-score">0</p>
-                </div>
-                <div class="score-item">
-                    <p>Dealer</p>
-                    <p id="dealer-score">0</p>
-                </div>
-            </div>
+            <h1>sambarberon/blackjack</h1>
         </header>
-        <div class="board">
-            <section id="card-table"></section>
-        </div>
-        <div class="btn-group">
-            <button id="new-game-btn">New Game</button>
-            <button id="draw-btn">Draw</button>
-            <button id="stand-btn">Stand</button>
-        </div>
+        <main>
+            <section class="rules">
+                <div class="rules-item">
+                    <h2>Goal</h2>
+                    <p>Get a hand value closer to 21 than the dealer, without going over.</p>
+                </div>
+                <div class="rules-item">
+                    <h2>Card values</h2>
+                    <p>2–10 = face value; J/Q/K = 10; Ace = 1 or 11, whichever suits your hand better.</p>
+                </div>
+                <div class="rules-item">
+                    <h2>Hit or Stand</h2>
+                    <p>On your turn, take another card (hit) or keep your hand as is (stand).</p>
+                </div>
+                <div class="rules-item">
+                    <h2>Bust</h2>
+                    <p>If your hand goes over 21, you automatically lose, regardless of the dealer's hand.</p>
+                </div>
+                <div class="rules-item">
+                    <h2>Dealer rules</h2>
+                    <p>The dealer must keep hitting until reaching 17 or higher, then must stand.</p>
+                </div>
+                <div class="rules-item">
+                    <h2>Winning</h2>
+                    <p>You win if your hand is higher than the dealer's without busting, or if the dealer busts</p>
+                </div>
+            </section>
+            <section class="board">
+                <div class="board-top">
+                    <p id="result">click 'new game’ to start</p>
+                    <div id="card-table">
+                        <div class="hand" id="dealer-hand">
+                            <div class="hand-top">
+                                <h2>Dealer's hand</h2>
+                                <p class="score" id="dealer-score">0</p>
+                            </div>
+                            <div class="hand-bottom">
+                                <div class="hand-cards" id="dealer-hand-cards">
+                                    <div class="fake-card"></div>
+                                    <div class="fake-card"></div>
+                                </div>  
+                                <p class="hand-value" id="dealer-hand-value">0</p>
+                            </div>
+                        </div>
+                        <div class="hand" id="player-hand">
+                            <div class="hand-top">
+                                <h2>Player's hand</h2>
+                                <p class="score" id="player-score">0</p>
+                            </div>
+                            <div class="hand-bottom">
+                                <div class="hand-cards" id="player-hand-cards">
+                                    <div class="fake-card"></div>
+                                    <div class="fake-card"></div>
+                                </div>
+                                <p class="hand-value" id="player-hand-value">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button id="draw-btn" disabled>Hit</button>
+                    <button id="stand-btn" disabled>Stand</button>
+                    <button id="new-game-btn">New Game</button>
+                </div>
+            </section>
+        </main>
         <script src="script.js"></script>
     </body>
 </html>
+
