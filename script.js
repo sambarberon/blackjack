@@ -113,16 +113,25 @@ function renderCards() {
 }
 
 function getCardsValue(hand) {
-    return hand.reduce((total, card) => {
+    let total = hand.reduce((total, card) => {
         if (['KING', 'QUEEN', 'JACK'].includes(card.value)) {
             return total + 10
         }
         if (card.value === 'ACE') {
             return total + 11
         }
-
+        
         return total + parseInt(card.value)
     }, 0)
+    
+    let aceCount = hand.filter((card) => card.value === 'ACE').length
+
+    while (total > 21 && aceCount > 0) {
+        total = total - 10
+        aceCount--
+    }
+
+    return total
 }
 
 function getCardsImg(hand) {
