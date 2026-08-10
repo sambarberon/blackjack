@@ -69,6 +69,8 @@ async function newGame() {
 
 async function drawPlayerCard(){
     try {
+        drawBtn.disabled = true
+        
         const newCardResponse = await fetch(`https://www.deckofcardsapi.com/api/deck/${gameState.deckId}/draw/?count=1`)
         const newCardData = await newCardResponse.json()
 
@@ -78,6 +80,8 @@ async function drawPlayerCard(){
 
         if (getCardsValue(gameState.playerCards) > 21) {
             endRound()
+        } else {
+            drawBtn.disabled = false
         }
         
     } catch(err) {
