@@ -112,8 +112,8 @@ async function drawDealerCard(){
 
 function renderCards() {
     cardTable.innerHTML = 
-        getHand(gameState.dealerCards, gameState.dealerScore,'dealer')
-        + getHand(gameState.playerCards, gameState.playerScore,'player')
+        getHand(gameState.dealerCards, !gameState.gameOver, gameState.dealerScore,'dealer')
+        + getHand(gameState.playerCards, false, gameState.playerScore,'player')
 }
 
 function getCardsValue(hand) {
@@ -138,14 +138,20 @@ function getCardsValue(hand) {
     return total
 }
 
-function getCardsImg(hand) {
-    return hand.map((card) => `<img class="card-img" src="${card.image}" />`).join('')
+function getCardsImg(hand, hideLast) {
+    if (hideLast) {
+        return `
+            <img class="card-img" src="${hand[0].image}" />
+            <img class="card-img" src="https://www.deckofcardsapi.com/static/img/back.png" />
+        `
+    } else {
+        return hand.map((card) => `<img class="card-img" src="${card.image}" />`).join('')
+    }
 }
 
-function getHand(hand, score, name) {
+function getHand(hand, hideLast, score, name) {
     const cardsValue = getCardsValue(hand)
-    const cardsImg = getCardsImg(hand)
-
+    const cardsImg = getCardsImg(hand, hideLast)
 
     return `
         <div class="hand" id="${name}-hand">
@@ -223,4 +229,5 @@ function endRound(){
     }
 
     resultEl.textContent = result
+    renderCards()
 }
