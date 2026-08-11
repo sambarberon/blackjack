@@ -138,6 +138,14 @@ function getCardsValue(hand) {
     return total
 }
 
+function getDisplayValue(hand, hideLast) {
+    if (hideLast) {
+        return `${getCardsValue([hand[0]])} + ?`
+    }
+
+    return getCardsValue(hand)
+}
+
 function getCardsImg(hand, hideLast) {
     if (hideLast) {
         return `
@@ -150,7 +158,7 @@ function getCardsImg(hand, hideLast) {
 }
 
 function getHand(hand, hideLast, score, name) {
-    const cardsValue = getCardsValue(hand)
+    const cardsValue = getDisplayValue(hand, hideLast)
     const cardsImg = getCardsImg(hand, hideLast)
 
     return `
