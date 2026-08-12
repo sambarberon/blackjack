@@ -18,6 +18,7 @@ let gameState = {
     dealerCards: [],
     playerScore: 0,
     dealerScore: 0,
+    dealerTurn: false,
     gameOver: false,
     remaining: 0,
 }
@@ -29,6 +30,7 @@ async function newGame() {
         dealerCards: [],
         playerScore: gameState.playerScore,
         dealerScore: gameState.dealerScore,
+        dealerTurn: false,
         gameOver: false,
         remaining: 0,
     }
@@ -188,9 +190,15 @@ function naturalBlackjack() {
 // Hand
 
 function renderCards() {
-    cardTable.innerHTML = 
-        getHand(gameState.dealerCards, !gameState.gameOver, gameState.dealerScore,'dealer')
-        + getHand(gameState.playerCards, false, gameState.playerScore,'player')
+    if (!gameState.dealerTurn) {
+        cardTable.innerHTML = 
+            getHand(gameState.dealerCards, !gameState.gameOver, gameState.dealerScore,'dealer')
+            + getHand(gameState.playerCards, false, gameState.playerScore,'player')
+    } else {
+        cardTable.innerHTML = 
+            getHand(gameState.dealerCards, false, gameState.dealerScore,'dealer')
+            + getHand(gameState.playerCards, false, gameState.playerScore,'player')
+    }
 }
 
 function getCardsValue(hand) {
@@ -257,8 +265,12 @@ function getHand(hand, hideLast, score, name) {
 // End
 
 async function stand() {
+    gameState.dealerTurn = true
+
     drawBtn.disabled = true
     standBtn.disabled = true
+
+    renderCards()
 
     await dealerTurn()
     endRound()
@@ -266,13 +278,21 @@ async function stand() {
 
 async function dealerTurn() {
     while (getCardsValue(gameState.dealerCards) < 17) {
+        await wait(1000)
         await drawDealerCard()
     }
 }
 
-function endRound(){
+function wait(ms) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms)
+    })
+}
+
+function endRound() {
     if (gameState.gameOver) return
     
+    gameState.dealerTurn = false
     gameState.gameOver = true
     newRoundBtn.disabled = false
     drawBtn.disabled = true
