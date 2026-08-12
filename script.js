@@ -1,4 +1,4 @@
-const newGameBtn = document.getElementById('new-game-btn')
+const newRoundBtn = document.getElementById('new-round-btn')
 const drawBtn = document.getElementById('draw-btn')
 const standBtn = document.getElementById('stand-btn')
 const cardTable = document.getElementById('card-table')
@@ -6,7 +6,7 @@ const resultEl = document.getElementById('result')
 
 // Event listener
 
-newGameBtn.addEventListener('click', newGame)
+newRoundBtn.addEventListener('click', newRound)
 drawBtn.addEventListener('click', drawPlayerCard)
 standBtn.addEventListener('click', stand)
 
@@ -19,6 +19,7 @@ let gameState = {
     playerScore: 0,
     dealerScore: 0,
     gameOver: false,
+    remaining: 0,
 }
 
 async function newGame() {
@@ -29,36 +30,82 @@ async function newGame() {
         playerScore: gameState.playerScore,
         dealerScore: gameState.dealerScore,
         gameOver: false,
+        remaining: 0,
     }
 
     resultEl.textContent = 'Hit or Stand'
-    newGameBtn.disabled = true
+    newRoundBtn.disabled = true
 
     try {
-        const response = await fetch('https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
+        const response = await fetch('https://www.deckofcardsapi.com/api/deck/new/')
         const data = await response.json()
         
         gameState.deckId = data.deck_id
+        gameState.remaining = data.remaining
         
+        await drawStartingCards(gameState.deckId)
+        renderCards()
+        naturalBlackjack()
+
+        return gameState
+
+    } catch(err) {
+        console.log('Error: ', err)
+        throw err
+    }
+}
+
+async function newRound() {
+    gameState.gameOver = false
+
+    resultEl.textContent = 'Hit or Stand'
+    newRoundBtn.disabled = true
+
+    try {
+        await discardCards(gameState.deckId)
+        await verifyRemaining()
+        await drawStartingCards(gameState.deckId)
+        renderCards()
+        naturalBlackjack()
+
+        return gameState
+
+    } catch(err) {
+        console.log('Error: ', err)
+        throw err
+    }
+}
+
+async function discardCards(deckId) {
+    try {
+        const playerCardsCode = gameState.playerCards.map(card => card.code).join(',')
+        const dealerCardsCode = gameState.dealerCards.map(card => card.code).join(',')
+        const allCardsCode = playerCardsCode + ',' + dealerCardsCode
+
+        const discardResponse = await fetch(`https://www.deckofcardsapi.com/api/deck/${deckId}/pile/discard/add/?cards=${allCardsCode}`)
+        const discardData = await discardResponse.json()
+    } catch(err) {
+        console.log('Error: ', err)
+        throw err
+    }
+}
+
+async function drawStartingCards(deckId) {
+    gameState.playerCards = []
+    gameState.dealerCards = []
+
+    try {
         // Player cards
-        const playerCardsResponse = await fetch(`https://www.deckofcardsapi.com/api/deck/${gameState.deckId}/draw/?count=2`)
+        const playerCardsResponse = await fetch(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=2`)
         const playerCardsData = await playerCardsResponse.json()
         gameState.playerCards = playerCardsData.cards
 
         // Dealer cards
-        const dealerCardsResponse = await fetch(`https://www.deckofcardsapi.com/api/deck/${gameState.deckId}/draw/?count=2`)
+        const dealerCardsResponse = await fetch(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=2`)
         const dealerCardsData = await dealerCardsResponse.json()
         gameState.dealerCards = dealerCardsData.cards
-
-        renderCards()
-
-        if (getCardsValue(gameState.playerCards) === 21 || getCardsValue(gameState.dealerCards) === 21) {
-            endRound()
-        } else {
-            drawBtn.disabled = false
-            standBtn.disabled = false
-        }
-
+        gameState.remaining = dealerCardsData.remaining
+        
         return gameState
 
     } catch(err) {
@@ -70,11 +117,14 @@ async function newGame() {
 async function drawPlayerCard(){
     try {
         drawBtn.disabled = true
+
+        await verifyRemaining()
         
         const newCardResponse = await fetch(`https://www.deckofcardsapi.com/api/deck/${gameState.deckId}/draw/?count=1`)
         const newCardData = await newCardResponse.json()
 
         gameState.playerCards.push(newCardData.cards[0])
+        gameState.remaining = newCardData.remaining
 
         renderCards()
 
@@ -92,10 +142,13 @@ async function drawPlayerCard(){
 
 async function drawDealerCard(){
     try {
+        await verifyRemaining()
+
         const newCardResponse = await fetch(`https://www.deckofcardsapi.com/api/deck/${gameState.deckId}/draw/?count=1`)
         const newCardData = await newCardResponse.json()
 
         gameState.dealerCards.push(newCardData.cards[0])
+        gameState.remaining = newCardData.remaining
 
         renderCards()
 
@@ -105,6 +158,30 @@ async function drawDealerCard(){
     } catch(err) {
         console.log('Error: ', err)
         throw err
+    }
+}
+
+async function verifyRemaining() {
+    try {
+        if (gameState.remaining < 10) {
+            await fetch(`https://www.deckofcardsapi.com/api/deck/${gameState.deckId}/pile/discard/return/`)
+            const shuffleResponse = await fetch(`https://www.deckofcardsapi.com/api/deck/${gameState.deckId}/shuffle/`)
+            const shuffleData = await shuffleResponse.json()
+
+            gameState.remaining = shuffleData.remaining
+        }
+    } catch(err) {
+        console.log('Error: ', err)
+        throw err
+    }
+}
+
+function naturalBlackjack() {
+    if (getCardsValue(gameState.playerCards) === 21 || getCardsValue(gameState.dealerCards) === 21) {
+        endRound()
+    } else {
+        drawBtn.disabled = false
+        standBtn.disabled = false
     }
 }
 
@@ -197,7 +274,7 @@ function endRound(){
     if (gameState.gameOver) return
     
     gameState.gameOver = true
-    newGameBtn.disabled = false
+    newRoundBtn.disabled = false
     drawBtn.disabled = true
     standBtn.disabled = true 
 
@@ -239,3 +316,5 @@ function endRound(){
     resultEl.textContent = result
     renderCards()
 }
+
+newGame()
