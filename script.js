@@ -21,6 +21,7 @@ let gameState = {
     dealerTurn: false,
     gameOver: false,
     remaining: 0,
+    history: [],
 }
 
 async function newGame() {
@@ -33,6 +34,7 @@ async function newGame() {
         dealerTurn: false,
         gameOver: false,
         remaining: 0,
+        history: [],
     }
 
     resultEl.textContent = 'Hit or Stand'
@@ -303,37 +305,66 @@ function endRound() {
     const playerBust = playerValue > 21
     const dealerBust = dealerValue > 21
 
-    let result = ''
+    let result = {}
 
     if (playerBust) {
         gameState.dealerScore++
-        result = 'Dealer wins (Player bust)'
+        result = {
+            text: 'Player bust! (Dealer wins)',
+            winner: 'dealer'
+        }
     } else if (dealerBust) {
         gameState.playerScore++
-        result = 'Player wins (Dealer bust)'
+        result = {
+            text: 'Dealer bust! (Player wins)',
+            winner: 'player'
+        }
     } else if (playerValue === 21 && playerValue > dealerValue && gameState.playerCards.length === 2) {
         gameState.playerScore++
-        result = 'Blackjack! (Player wins)'
+        result = {
+            text: 'Blackjack! (Player wins)',
+            winner: 'player'
+        }
     } else if (playerValue === 21 && playerValue > dealerValue) {
         gameState.playerScore++
-        result = '21! (Player wins)'
+        result = {
+            text: '21! (Player wins)',
+            winner: 'player'
+        }
     } else if (playerValue > dealerValue) {
         gameState.playerScore++
-        result = 'Player wins'
+        result = {
+            text: 'Player wins',
+            winner: 'player'
+        }
     } else if (dealerValue === 21 && dealerValue > playerValue && gameState.dealerCards.length === 2) {
         gameState.dealerScore++
-        result = 'Blackjack! (Dealer wins)'
+        result = {
+            text: 'Blackjack! (Dealer wins)',
+            winner: 'dealer'
+        }
     } else if (dealerValue === 21 && dealerValue > playerValue) {
         gameState.dealerScore++
-        result = '21! (Dealer wins)'
+        result = {
+            text: '21! (Dealer wins)',
+            winner: 'dealer'
+        }
     } else if (dealerValue > playerValue) {
         gameState.dealerScore++
-        result = 'Dealer wins'
+        result = {
+            text: 'Dealer wins',
+            winner: 'dealer'
+        }
     } else {
-        result = 'Push (tie)'
+        result = {
+            text: 'Push! (tie)',
+            winner: 'tie'
+        }
     }
 
-    resultEl.textContent = result
+    gameState.history.push(result)
+
+    resultEl.textContent = result.text
     renderCards()
 }
 
