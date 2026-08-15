@@ -2,7 +2,7 @@ const newRoundBtn = document.getElementById('new-round-btn')
 const drawBtn = document.getElementById('draw-btn')
 const standBtn = document.getElementById('stand-btn')
 const cardTable = document.getElementById('card-table')
-const resultEl = document.getElementById('result')
+const historyEl = document.getElementById('history-el')
 
 // Event listener
 
@@ -37,11 +37,10 @@ async function newGame() {
         history: [],
     }
 
-    resultEl.textContent = 'Hit or Stand'
     newRoundBtn.disabled = true
 
     try {
-        const response = await fetch('https://www.deckofcardsapi.com/api/deck/new/')
+        const response = await fetch('https://www.deckofcardsapi.com/api/deck/new/shuffle')
         const data = await response.json()
         
         gameState.deckId = data.deck_id
@@ -62,7 +61,6 @@ async function newGame() {
 async function newRound() {
     gameState.gameOver = false
 
-    resultEl.textContent = 'Hit or Stand'
     newRoundBtn.disabled = true
 
     try {
@@ -364,8 +362,37 @@ function endRound() {
 
     gameState.history.push(result)
 
-    resultEl.textContent = result.text
     renderCards()
+    renderHistory()
+}
+
+// History
+
+function renderHistory() {
+    historyEl.innerHTML = gameState.history.map((round) => {
+        if (round.winner === 'player') {
+            return `
+                <div class="history-item">
+                    <p class="blue">+1</p>
+                    <p>${round.text}</p>
+                </div>
+            `
+        } else if (round.winner === 'dealer') {
+            return `
+                <div class="history-item">
+                    <p class="red">+1</p>
+                    <p>${round.text}</p>
+                </div>
+            `
+        } else {
+            return `
+                <div class="history-item">
+                    <p class="grey">+0</p>
+                    <p>${round.text}</p>
+                </div>
+            `
+        }
+    }).join('')
 }
 
 newGame()

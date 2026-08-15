@@ -5,11 +5,11 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <header>
-            <h1>sambarberon/blackjack</h1>
-        </header>
         <main>
-            <section class="rules">
+            <section class="side">
+                <header>
+                    <h2>Rules</h2>
+                </header>
                 <div class="rules-item">
                     <h2>Goal</h2>
                     <p>Get a hand value closer to 21 than the dealer, without going over.</p>
@@ -35,42 +35,25 @@
                     <p>You win if your hand is higher than the dealer's without busting, or if the dealer busts</p>
                 </div>
             </section>
-            <section class="board">
-                <div class="board-top">
-                    <p id="result">click 'new game’ to start</p>
-                    <div id="card-table">
-                        <div class="hand" id="dealer-hand">
-                            <div class="hand-top">
-                                <h2>Dealer's hand</h2>
-                                <p class="score" id="dealer-score">0</p>
-                            </div>
-                            <div class="hand-bottom">
-                                <div class="hand-cards" id="dealer-hand-cards">
-                                    <div class="fake-card"></div>
-                                    <div class="fake-card"></div>
-                                </div>  
-                                <p class="hand-value" id="dealer-hand-value">0</p>
-                            </div>
-                        </div>
-                        <div class="hand" id="player-hand">
-                            <div class="hand-top">
-                                <h2>Player's hand</h2>
-                                <p class="score" id="player-score">0</p>
-                            </div>
-                            <div class="hand-bottom">
-                                <div class="hand-cards" id="player-hand-cards">
-                                    <div class="fake-card"></div>
-                                    <div class="fake-card"></div>
-                                </div>
-                                <p class="hand-value" id="player-hand-value">0</p>
-                            </div>
-                        </div>
-                    </div>
+            <section>
+                <header>
+                    <h2>Table</h2>
+                </header>
+                <div class="table">
+                    <div id="card-table"></div>
                 </div>
                 <div class="btn-group">
                     <button id="draw-btn" disabled>Hit</button>
                     <button id="stand-btn" disabled>Stand</button>
                     <button id="new-round-btn">New Round</button>
+                </div>
+            </section>
+            <section class="side">
+                <header>
+                    <h2>History</h2>
+                </header>
+                <div id="history-el">
+                    <p>No round history yet</p>
                 </div>
             </section>
         </main>
