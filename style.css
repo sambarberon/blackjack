@@ -15,15 +15,31 @@ body {
     flex-direction: column;
 }
 
+main {
+    height: 100%;
+    padding: 4em 8em;
+    display: flex;
+    gap: 1em;
+    
+}
+
+section {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #121212;
+    border: 1px solid #272727;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.side {
+    width: 320px;
+}
+
 header {
     padding: 1em 2em;
     border-bottom: 1px solid #272727;
-}
-
-main {
-    height: 100%;
-    display: flex;
-
 }
 
 h1, h2, h3 {
@@ -40,26 +56,28 @@ h2 {
     font-size: 1rem;
 }
 
+.btn-group {
+    padding: 0.5em;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5em;
+}
+
 button {
     padding: 16px 32px;
     font-family: inherit;
-    font-size: 1.25rem;
-    text-transform: lowercase;
+    font-size: 1em;
     color: #000;
-    background-color: rgb(255, 242, 117);
-    border: none;
+    background-color: #FEF24B;
+    border: 1px solid #272727;
     border-radius: 4px;
     cursor: pointer;
 }
 
 button:disabled {
-    color: #999;
-    background-color: #333;
-}
-
-.rules {
-    width: 320px;
-    border-right: 1px solid #272727;
+    color: #999999;
+    background-color: #1D1D1D;
+    cursor: not-allowed;
 }
 
 .rules-item {
@@ -78,14 +96,9 @@ button:disabled {
 
 /* —— Hand —— */
 
-.board {
+.table {
+    height: 100%;
     padding: 2em;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.board-top {
     display: flex;
     flex-direction: column;
     gap: 3em;
@@ -129,7 +142,7 @@ button:disabled {
 
 
 .card-img {
-    height: 160px;
+    height: 96px;
 }
 
 .hand-value {
@@ -141,4 +154,38 @@ button:disabled {
     height: 160px;
     width: 120px;
     border-radius: 8px;
+}
+
+#history-el {
+    height: 100%;
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 1em;
+}
+
+.history-item {
+    display: flex;
+    gap: 0.5em;
+}
+
+.history-item p {
+    font-size: 0.8rem;
+}
+
+.blue {
+    color: #5995ED;
+}
+
+.red {
+    color: #EE4364;
+}
+
+.grey {
+    color: #999999;
+}
+
+.blue, .red, .grey {
+    font-weight: 600;
 }
