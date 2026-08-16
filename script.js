@@ -1,8 +1,12 @@
 const newRoundBtn = document.getElementById('new-round-btn')
 const drawBtn = document.getElementById('draw-btn')
 const standBtn = document.getElementById('stand-btn')
-const cardTable = document.getElementById('card-table')
+
+const resultEl = document.getElementById('result-el')
 const historyEl = document.getElementById('history-el')
+
+const playerEl = document.getElementById('player-el')
+const dealerEl = document.getElementById('dealer-el')
 
 // Event listener
 
@@ -132,6 +136,8 @@ async function drawPlayerCard(){
 
         if (getCardsValue(gameState.playerCards) > 21) {
             endRound()
+        } else if (getCardsValue(gameState.playerCards) === 21) {
+            stand()
         } else {
             drawBtn.disabled = false
         }
@@ -191,13 +197,11 @@ function naturalBlackjack() {
 
 function renderCards() {
     if (!gameState.dealerTurn) {
-        cardTable.innerHTML = 
-            getHand(gameState.dealerCards, !gameState.gameOver, gameState.dealerScore,'dealer')
-            + getHand(gameState.playerCards, false, gameState.playerScore,'player')
+        dealerEl.innerHTML = getHand(gameState.dealerCards, !gameState.gameOver, gameState.dealerScore,'dealer')
+        playerEl.innerHTML = getHand(gameState.playerCards, false, gameState.playerScore,'player')
     } else {
-        cardTable.innerHTML = 
-            getHand(gameState.dealerCards, false, gameState.dealerScore,'dealer')
-            + getHand(gameState.playerCards, false, gameState.playerScore,'player')
+        dealerEl.innerHTML = getHand(gameState.dealerCards, false, gameState.dealerScore,'dealer')
+        playerEl.innerHTML = getHand(gameState.playerCards, false, gameState.playerScore,'player')
     }
 }
 
@@ -247,18 +251,15 @@ function getHand(hand, hideLast, score, name) {
     const cardsImg = getCardsImg(hand, hideLast)
 
     return `
-        <div class="hand" id="${name}-hand">
-            <div class="hand-top">
-                <h2>${name}'s hand</h2>
-                <p class="score" id="${name}-score">${score}</p>
-            </div>
-            <div class="hand-bottom">
-                <div class="hand-cards" id="${name}-hand-cards">
-                    ${cardsImg}
-                </div>
-                <p class="hand-value" id="${name}-hand-value">${cardsValue}</p>
-            </div>
+        <div class="hand-top" id="${name}">
+            <p>${name}</p>
+            <p>//</p>
+            <p>${score} PTS</p>
         </div>
+        <div class="hand-card">
+            ${cardsImg}
+        </div>
+        <p class="hand-value">${cardsValue}</p>
     `
 }
 
@@ -308,25 +309,25 @@ function endRound() {
     if (playerBust) {
         gameState.dealerScore++
         result = {
-            text: 'Player bust! (Dealer wins)',
+            text: 'Player bust!',
             winner: 'dealer'
         }
     } else if (dealerBust) {
         gameState.playerScore++
         result = {
-            text: 'Dealer bust! (Player wins)',
+            text: 'Dealer bust!',
             winner: 'player'
         }
     } else if (playerValue === 21 && playerValue > dealerValue && gameState.playerCards.length === 2) {
         gameState.playerScore++
         result = {
-            text: 'Blackjack! (Player wins)',
+            text: 'Blackjack!',
             winner: 'player'
         }
     } else if (playerValue === 21 && playerValue > dealerValue) {
         gameState.playerScore++
         result = {
-            text: '21! (Player wins)',
+            text: '21!',
             winner: 'player'
         }
     } else if (playerValue > dealerValue) {
@@ -338,13 +339,13 @@ function endRound() {
     } else if (dealerValue === 21 && dealerValue > playerValue && gameState.dealerCards.length === 2) {
         gameState.dealerScore++
         result = {
-            text: 'Blackjack! (Dealer wins)',
+            text: 'Blackjack!',
             winner: 'dealer'
         }
     } else if (dealerValue === 21 && dealerValue > playerValue) {
         gameState.dealerScore++
         result = {
-            text: '21! (Dealer wins)',
+            text: '21!',
             winner: 'dealer'
         }
     } else if (dealerValue > playerValue) {
@@ -355,7 +356,7 @@ function endRound() {
         }
     } else {
         result = {
-            text: 'Push! (tie)',
+            text: 'Push!',
             winner: 'tie'
         }
     }
