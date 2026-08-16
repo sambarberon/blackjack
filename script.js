@@ -309,25 +309,25 @@ function endRound() {
     if (playerBust) {
         gameState.dealerScore++
         result = {
-            text: 'Player bust! (Dealer wins)',
+            text: 'Player bust!',
             winner: 'dealer'
         }
     } else if (dealerBust) {
         gameState.playerScore++
         result = {
-            text: 'Dealer bust! (Player wins)',
+            text: 'Dealer bust!',
             winner: 'player'
         }
     } else if (playerValue === 21 && playerValue > dealerValue && gameState.playerCards.length === 2) {
         gameState.playerScore++
         result = {
-            text: 'Blackjack! (Player wins)',
+            text: 'Blackjack!',
             winner: 'player'
         }
     } else if (playerValue === 21 && playerValue > dealerValue) {
         gameState.playerScore++
         result = {
-            text: '21! (Player wins)',
+            text: '21!',
             winner: 'player'
         }
     } else if (playerValue > dealerValue) {
@@ -339,13 +339,13 @@ function endRound() {
     } else if (dealerValue === 21 && dealerValue > playerValue && gameState.dealerCards.length === 2) {
         gameState.dealerScore++
         result = {
-            text: 'Blackjack! (Dealer wins)',
+            text: 'Blackjack!',
             winner: 'dealer'
         }
     } else if (dealerValue === 21 && dealerValue > playerValue) {
         gameState.dealerScore++
         result = {
-            text: '21! (Dealer wins)',
+            text: '21!',
             winner: 'dealer'
         }
     } else if (dealerValue > playerValue) {
@@ -356,7 +356,7 @@ function endRound() {
         }
     } else {
         result = {
-            text: 'Push! (tie)',
+            text: 'Push!',
             winner: 'tie'
         }
     }
