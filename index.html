@@ -2,12 +2,21 @@
 <html>
     <head>
         <title>Blackjack</title>
-        <link rel="stylesheet" href="style.css">
+        <link
+            rel="stylesheet"
+            href="style.css" 
+        />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"
+        />
     </head>
     <body>
         <main>
             <section class="side">
                 <header>
+                    <i class="ph ph-clipboard-text"></i>
                     <h2>Rules</h2>
                 </header>
                 <div class="rules-item">
@@ -37,10 +46,16 @@
             </section>
             <section>
                 <header>
+                    <i class="ph ph-stack-simple"></i>
                     <h2>Table</h2>
                 </header>
                 <div class="table">
-                    <div id="card-table"></div>
+                    <div class="hand" id="dealer-el"></div>
+                    <div id="result-el">
+                        <p class="grey">//</p>
+                        <p>Hit or Stand</p>
+                    </div>
+                    <div class="hand" id="player-el"></div>
                 </div>
                 <div class="btn-group">
                     <button id="draw-btn" disabled>Hit</button>
@@ -50,10 +65,11 @@
             </section>
             <section class="side">
                 <header>
+                    <i class="ph ph-clock-counter-clockwise"></i>
                     <h2>History</h2>
                 </header>
                 <div id="history-el">
-                    <p>No round history yet</p>
+                    <p class="muted">No round history yet</p>
                 </div>
             </section>
         </main>
